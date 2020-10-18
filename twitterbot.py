@@ -6,6 +6,8 @@ import json
 import tweepy
 import time
 import requests
+from retrying import retry
+
 
 def add_text_to_image(img, text, font_path, font_size, font_color, height, width, max_length=50):#画像に文字を合成する部分
     position = (width, height)
@@ -21,30 +23,18 @@ def culc_diff(a, b):#差分計算
     except:
         return 0
 
-def make_json(idol_id):#json整形部
-    s1 = scraping_json(idol_id, 1, 10)
-    s2 = scraping_json(idol_id, 91, 100)
-    s3 = scraping_json(idol_id, 991, 1000)
-    s4 = scraping_json(idol_id, 2991, 3000)
-    p1 = s1[-4]['entries']
-    p2 = s2[-4]['entries']
-    p3 = s3[-4]['entries']
-    p4 = s4[-4]['entries']
-    pp1 = s1[-30]['entries']
-    pp2 = s2[-30]['entries']
-    pp3 = s3[-30]['entries']
-    pp4 = s4[-30]['entries']
-    s1 = s1[-1]['entries']
-    s2 = s2[-1]['entries']
-    s3 = s3[-1]['entries']
-    s4 = s4[-1]['entries']
-    return {"1位":{'name':s1[0]["nickname"], 'fan_num':s1[0]["score"], 'dif_60':culc_diff(s1[0]["score"], p1[0]["score"]), 'dif_24':culc_diff(s1[0]["score"], pp1[0]["score"])}, 
-                   "2位":{'name':s1[1]["nickname"], 'fan_num':s1[1]["score"], 'dif_60':culc_diff(s1[1]["score"], p1[1]["score"]), 'dif_24':culc_diff(s1[1]["score"], pp1[1]["score"])},
-                   "3位":{'name':s1[2]["nickname"], 'fan_num':s1[2]["score"], 'dif_60':culc_diff(s1[2]["score"], p1[2]["score"]), 'dif_24':culc_diff(s1[2]["score"], pp1[2]["score"])},
-                   "10位":{'name':s1[9]["nickname"], 'fan_num':s1[9]["score"], 'dif_60':culc_diff(s1[9]["score"], p1[9]["score"]), 'dif_24':culc_diff(s1[9]["score"], pp1[9]["score"])},
-                   "100位":{'name':s2[9]["nickname"], 'fan_num':s2[9]["score"], 'dif_60':culc_diff(s2[9]["score"], p2[9]["score"]), 'dif_24':culc_diff(s2[9]["score"], pp2[9]["score"])},
-                   "1000位":{'name':s3[9]["nickname"], 'fan_num':s3[9]["score"], 'dif_60':culc_diff(s3[9]["score"], p3[9]["score"]), 'dif_24':culc_diff(s3[9]["score"], pp3[9]["score"])},
-                   "3000位":{'name':s4[9]["nickname"], 'fan_num':s4[9]["score"], 'dif_60':culc_diff(s4[9]["score"], p4[9]["score"]), 'dif_24':culc_diff(s4[9]["score"], pp4[9]["score"])}
+def make_json(idol_id, now_time):#json整形部
+    s = scraping_json(idol_id, now_time)
+    p = scraping_json(idol_id, now_time-datetime.timedelta(hours=1))
+    pp = scraping_json(idol_id, now_time-datetime.timedelta(days=1))
+
+    return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':culc_diff(s[0]["score"], p[0]["score"]), 'dif_24':culc_diff(s[0]["score"], pp[0]["score"])}, 
+                   "2位":{'name':s[1]["nickname"], 'fan_num':s[1]["score"], 'dif_60':culc_diff(s[1]["score"], p[1]["score"]), 'dif_24':culc_diff(s[1]["score"], pp[1]["score"])},
+                   "3位":{'name':s[2]["nickname"], 'fan_num':s[2]["score"], 'dif_60':culc_diff(s[2]["score"], p[2]["score"]), 'dif_24':culc_diff(s[2]["score"], pp[2]["score"])},
+                   "10位":{'name':s[3]["nickname"], 'fan_num':s[3]["score"], 'dif_60':culc_diff(s[3]["score"], p[3]["score"]), 'dif_24':culc_diff(s[3]["score"], pp[3]["score"])},
+                   "100位":{'name':s[4]["nickname"], 'fan_num':s[4]["score"], 'dif_60':culc_diff(s[4]["score"], p[4]["score"]), 'dif_24':culc_diff(s[4]["score"], pp[4]["score"])},
+                   "1000位":{'name':s[5]["nickname"], 'fan_num':s[5]["score"], 'dif_60':culc_diff(s[5]["score"], p[5]["score"]), 'dif_24':culc_diff(s[5]["score"], pp[5]["score"])},
+                   "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':culc_diff(s[6]["score"], p[6]["score"]), 'dif_24':culc_diff(s[6]["score"], pp[6]["score"])}
                    }
             
 def make_image(now_time, font_color="black"):#画像生成部
@@ -66,31 +56,28 @@ def make_image(now_time, font_color="black"):#画像生成部
     width = 180
     img = add_text_to_image(base_img, text, font_path, font_size, font_color, height, width) # dummy for get text_size
     
-    text = str(datetime.datetime.now())[:-7]
+    text = str(now)[:-7]
     font_size = 40
     height = 360
     width = 440
     img = add_text_to_image(base_img, text, font_path, font_size, font_color, height, width) # dummy for get text_size
 
-    past_time = (datetime.datetime.now().day-12)*24+datetime.datetime.now().hour-15
-    text = "開始から"+str(past_time)+"時間経過(残り"+str(189-past_time)+"時間)"
+    past_time = (now.day-12)*24+now.hour-15
+    text = "開始から"+str(past_time)+"時間経過(残り"+str(213-past_time)+"時間)"
     font_size = 40
     height = 500
     width = 230
     img = add_text_to_image(base_img, text, font_path, font_size, font_color, height, width) # dummy for get text_size
     
-
-    #kogane_data = get_data()
-
-    mano_data = make_json("1")
+    mano_data = make_json("1", now_time)
     img_mano = make_rank('mano', mano_data, font_path)
-    hiori_data = make_json('2')
+    hiori_data = make_json('2', now_time)
     img_hiori = make_rank('hiori', hiori_data, font_path)
-    meguru_data = make_json('3')
+    meguru_data = make_json('3', now_time)
     img_meguru = make_rank('meguru', meguru_data, font_path)
-    kogane_data = make_json('4')
+    kogane_data = make_json('4', now_time)
     img_kogane = make_rank('kogane', kogane_data, font_path)
-    mamimi_data = make_json('5')
+    mamimi_data = make_json('5', now_time)
     img_mamimi = make_rank('mamimi', mamimi_data, font_path)
     
     dst11 = Image.new('RGB', (img_mano.width*2, img_mano.height))
@@ -113,19 +100,18 @@ def make_image(now_time, font_color="black"):#画像生成部
     dst1.paste(dst13, (0, img_mano.height*2))
     
     dst1.save("img1.png")
-    time.sleep(60)
     
-    sakuya_data = make_json('6')
+    sakuya_data = make_json('6', now_time)
     img_sakuya = make_rank('sakuya', sakuya_data, font_path)
-    yuika_data = make_json('7')
+    yuika_data = make_json('7', now_time)
     img_yuika = make_rank('yuika', yuika_data, font_path)
-    kiriko_data = make_json('8')
+    kiriko_data = make_json('8', now_time)
     img_kiriko = make_rank('kiriko', kiriko_data, font_path)
-    amana_data = make_json('14')
+    amana_data = make_json('14', now_time)
     img_amana = make_rank('amana', amana_data, font_path)
-    tenka_data = make_json('15')
+    tenka_data = make_json('15', now_time)
     img_tenka = make_rank('tenka', tenka_data, font_path)
-    chiyuki_data = make_json('16')
+    chiyuki_data = make_json('16', now_time)
     img_chiyuki = make_rank('chiyuki', chiyuki_data, font_path)
 
 
@@ -149,20 +135,19 @@ def make_image(now_time, font_color="black"):#画像生成部
     dst2.paste(dst23, (0, img_mano.height*2))
     
     dst2.save("img2.png")
-    time.sleep(60)
     
-    kaho_data = make_json('9')
+    kaho_data = make_json('9', now_time)
     img_kaho = make_rank('kaho', kaho_data, font_path)
-    chiyoko_data = make_json('10')
+    chiyoko_data = make_json('10', now_time)
     img_chiyoko = make_rank('chiyoko', chiyoko_data, font_path)
-    juri_data = make_json('11')
+    juri_data = make_json('11', now_time)
     img_juri = make_rank('juri', juri_data, font_path)    
-    rinze_data = make_json('12')
+    rinze_data = make_json('12', now_time)
     img_rinze = make_rank('rinze', rinze_data, font_path)
-    natsuha_data = make_json('13')
+    natsuha_data = make_json('13', now_time)
     img_natsuha = make_rank('natsuha', natsuha_data, font_path)
 
-    asahi_data = make_json('17')
+    asahi_data = make_json('17', now_time)
     img_asahi = make_rank('asahi', asahi_data, font_path)
     
     dst31 = Image.new('RGB', (img_mano.width*2, img_mano.height))
@@ -185,19 +170,18 @@ def make_image(now_time, font_color="black"):#画像生成部
     dst3.paste(dst33, (0, img_mano.height*2))
     
     dst3.save("img3.png")
-    time.sleep(60)
 
-    fuyuko_data = make_json('18')
+    fuyuko_data = make_json('18', now_time)
     img_fuyuko = make_rank('fuyuko', fuyuko_data, font_path)
-    mei_data = make_json('19')
+    mei_data = make_json('19', now_time)
     img_mei = make_rank('mei', mei_data, font_path)
-    tooru_data = make_json('20')
+    tooru_data = make_json('20', now_time)
     img_tooru = make_rank('tooru', tooru_data, font_path)
-    madoka_data = make_json('21')
+    madoka_data = make_json('21', now_time)
     img_madoka = make_rank('madoka', madoka_data, font_path)
-    koito_data = make_json('22')
+    koito_data = make_json('22', now_time)
     img_koito = make_rank('koito', koito_data, font_path)
-    hinana_data = make_json('23')
+    hinana_data = make_json('23', now_time)
     img_hinana = make_rank('hinana', hinana_data, font_path)
 
     dst41 = Image.new('RGB', (img_mano.width*2, img_mano.height))
@@ -456,16 +440,10 @@ def tweet_with_imgs(tweet, files):#ツイート実行部
 
     api.update_status(status=tweet, media_ids=media_ids)
 
-def tweet_picture(now_time):#メイン
-    nowtime = datetime.datetime.now()
+def tweet_picture(nowtime):#メイン
     past_time = (nowtime.day-12)*24+nowtime.hour-15
-    top_player = make_image(now_time)
+    make_image(nowtime)
     text = str(nowtime.month) + "/" +  str(nowtime.day) + " " + str(nowtime.hour) + ":00 現在\nPカップボーダー\n"
-    if(now_time % 100 == 24):
-        text += "最高日速\n"
-    else:
-        text += "最高時速\n"
-    text += no1 + no2 + no3
     text += "\n#Pカップボーダー"
     print(text)
     tweet_with_imgs(text, ["img1.png", "img2.png", "img3.png", "img4.png"])
@@ -481,11 +459,18 @@ def twitter_api():#API叩き部
 
     return api
 
-def scraping_json(idol_id, rank_begin, rank_end):
-    url = "https://kl8xmr7hlb.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40005/getHistoryByRank/{}/{}/{}".format(idol_id, rank_begin, rank_end)
+@retry(wait_fixed=10000)
+def scraping_json(idol_id, now_time):
+    unix_time = int(now_time.timestamp()*1000)
+    rank = "https://kl8xmr7hlb.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40005/getLatestRetrieve/{}?asOf={}".format(idol_id, unix_time)
+    r = requests.get(rank).json()
+    rank_id = r["body"]["id"]
+    url = "https://kl8xmr7hlb.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id)
     r = requests.get(url)
     data = r.json()
-    return data
+    time.sleep(3)
+    return data["body"]
 
-make_image(101609)
+now = datetime.datetime.now()
+tweet_picture(now)
     
