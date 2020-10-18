@@ -51,7 +51,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     width = 70
     img = add_text_to_image(base_img, text, font_path, font_size, font_color, height, width) # dummy for get text_size
     
-    text = "現在時刻:"
+    text = "取得時刻:"
     font_size = 60
     height = 350
     width = 180
