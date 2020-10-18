@@ -1,5 +1,4 @@
 datetime
 requests >= 2.24.0
 retrying
-PIL
 tweepy
