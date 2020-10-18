@@ -7,6 +7,7 @@ import tweepy
 import time
 import requests
 from retrying import retry
+from datetime import timedelta
 
 
 def add_text_to_image(img, text, font_path, font_size, font_color, height, width, max_length=50):#画像に文字を合成する部分
@@ -471,6 +472,7 @@ def scraping_json(idol_id, now_time):
     time.sleep(3)
     return data["body"]
 
-now = datetime.datetime.now()
-tweet_picture(now)
+now = datetime.datetime.now()+timedelta(hours=9)
+if((((now.day-12)*24+now.hour-15)<=213) and now.minute==20):
+    tweet_picture(now)
     
