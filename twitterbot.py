@@ -1,3 +1,8 @@
+################################################################
+#               Pcup borderbot                                 #
+#               by using matsurihi.me                          #
+#               made by k0gnae @23k_h                          #
+################################################################
 from PIL import Image, ImageDraw, ImageFont
 import os
 import sys
@@ -8,7 +13,6 @@ import time
 import requests
 from retrying import retry
 from datetime import timedelta
-
 
 def add_text_to_image(img, text, font_size, font_color, height, width, max_length=50):#画像に文字を合成する部分
     font_path = "rn3lo-1vsc6.ttf"
@@ -40,14 +44,34 @@ def make_json(idol_id):#json整形部
                     "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':culc_diff(s[6]["score"], p[6]["score"]), 'dif_24':culc_diff(s[6]["score"], pp[6]["score"])}
                     }
     except:#matsurihi.me
-        return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-25]["score"])}, 
-                    "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-3]["score"]), 'dif_24':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-25]["score"])},
-                    "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-3]["score"]), 'dif_24':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-25]["score"])},
-                    "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-3]["score"]), 'dif_24':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-25]["score"])},
-                    "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-3]["score"]), 'dif_24':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-25]["score"])},
-                    "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-3]["score"]), 'dif_24':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-25]["score"])},
-                    "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-3]["score"]), 'dif_24':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-25]["score"])}
-                    }
+        try:
+            return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-25]["score"])}, 
+                        "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-3]["score"]), 'dif_24':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-25]["score"])},
+                        "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-3]["score"]), 'dif_24':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-25]["score"])},
+                        "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-3]["score"]), 'dif_24':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-25]["score"])},
+                        "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-3]["score"]), 'dif_24':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-25]["score"])},
+                        "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-3]["score"]), 'dif_24':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-25]["score"])},
+                        "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-3]["score"]), 'dif_24':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-25]["score"])}
+                        }
+        except:
+            try:#2～23時間目
+                return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':data[0]["data"][-1]["score"]}, 
+                            "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-3]["score"]), 'dif_24':data[1]["data"][-1]["score"]},
+                            "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-3]["score"]), 'dif_24':data[2]["data"][-1]["score"]},
+                            "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-3]["score"]), 'dif_24':data[3]["data"][-1]["score"]},
+                            "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-3]["score"]), 'dif_24':data[4]["data"][-1]["score"]},
+                            "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-3]["score"]), 'dif_24':data[5]["data"][-1]["score"]},
+                            "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-3]["score"]), 'dif_24':data[6]["data"][-1]["score"]}
+                            }
+            except:#1時間目のみ
+                return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':data[0]["data"][-1]["score"], 'dif_24':data[0]["data"][-1]["score"]}, 
+                            "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':data[1]["data"][-1]["score"], 'dif_24':data[1]["data"][-1]["score"]},
+                            "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':data[2]["data"][-1]["score"], 'dif_24':data[2]["data"][-1]["score"]},
+                            "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':data[3]["data"][-1]["score"], 'dif_24':data[3]["data"][-1]["score"]},
+                            "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':data[4]["data"][-1]["score"], 'dif_24':data[4]["data"][-1]["score"]},
+                            "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':data[5]["data"][-1]["score"], 'dif_24':data[5]["data"][-1]["score"]},
+                            "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':data[6]["data"][-1]["score"], 'dif_24':data[6]["data"][-1]["score"]}
+                            }
 
 def make_image(now_time, font_color="black"):#画像生成部
     base_image_path = "haikei.jpg"
@@ -79,20 +103,20 @@ def make_image(now_time, font_color="black"):#画像生成部
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
     text = "現在時刻:"
-    font_size = 60
-    height = 400
-    width = 180
+    font_size = 40
+    height = 405
+    width = 185
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
     text = str(datetime.datetime.now())[:-7]
     font_size = 40
-    height = 410
-    width = 442
+    height = 412
+    width = 403
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
     text = "by:@Pcup_borderbot"
-    font_size = 10
-    height = base_img.height - 10
+    font_size = 13
+    height = base_img.height - 15
     width = 0
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
 
@@ -103,7 +127,14 @@ def make_image(now_time, font_color="black"):#画像生成部
     width = 230
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
-
+    past_time = (datetime.datetime.now().day-12)*24+datetime.datetime.now().hour-15
+    text = "※データ習得時間により差が出るため60分速は参考値です。"
+    font_size = 15
+    height = base_img.height - 15
+    width = 730
+    img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
+    # img.save("test.png")
+    # exit(0)
     #kogane_data = get_data()
     try:
         mano_data = make_json("1", border, border_b24)
@@ -303,6 +334,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     img_alsto = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
     bg_clear.paste(alsto, (img.width-184, img.height-163))
+    img_alsto = Image.alpha_composite(img_alsto, bg_clear)
     dst41.paste(img_alsto, (0, 0))
     dst41.paste(img_amana, (img_mano.width, 0))
     dst42.paste(img_tenka, (0, 0))
@@ -794,6 +826,7 @@ def tweet_with_imgs(tweet, files):#ツイート実行部
 def tweet_picture(nowtime):#メイン
     make_image(nowtime)
     text = str(nowtime.month) + "/" +  str(nowtime.day) + " " + str(nowtime.hour) + ":00 現在\nPカップボーダー\n"
+    # text += "(これはテストです, This is test tweet.)"
     text += "\n#Pカップボーダー"
     print(text)
     tweet_with_imgs(text, ["border1.png", "border2.png", "border3.png", "border4.png"])
@@ -828,7 +861,7 @@ def scraping_json(idol_id):
 
 
 now = datetime.datetime.now()+timedelta(hours=9)
-make_image(now)
-if((0 <= ((now.day-12)*24+now.hour-15)<= 213) and now.minute==20):
+# make_image(now)
+if((1 <= ((now.day-12)*24+now.hour-15)<= 213) and now.minute==20):
     tweet_picture(now)
     
