@@ -1,7 +1,7 @@
 ################################################################
 #               Pcup borderbot                                 #
 #               by using matsurihi.me                          #
-#               made by k0gnae @23k_h                          #
+#               made by @23k_h                                 #
 ################################################################
 from PIL import Image, ImageDraw, ImageFont
 import os
@@ -29,13 +29,15 @@ def culc_diff(a, b):#差分計算
     except:
         return 0
 #def make_json(idol_id, now_time):
-def make_json(idol_id):#json整形部
-    data = scraping_json(idol_id)
+def make_json(idol_id, now_time):#json整形部
+    data = scraping_json(idol_id, now_time)
+    print(data)
     try:#あっち
-        s = scraping_json(idol_id, now_time)
-        p = scraping_json(idol_id, now_time-datetime.timedelta(hours=1))
-        pp = scraping_json(idol_id, now_time-datetime.timedelta(days=1))
-        return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':culc_diff(s[0]["score"], p[0]["score"]), 'dif_24':culc_diff(s[0]["score"], pp[0]["score"])}, 
+        # print(data)
+        s = data[0]["body"]
+        try:
+            pp = data[2]["body"]
+            return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':culc_diff(s[0]["score"], p[0]["score"]), 'dif_24':culc_diff(s[0]["score"], pp[0]["score"])}, 
                     "2位":{'name':s[1]["nickname"], 'fan_num':s[1]["score"], 'dif_60':culc_diff(s[1]["score"], p[1]["score"]), 'dif_24':culc_diff(s[1]["score"], pp[1]["score"])},
                     "3位":{'name':s[2]["nickname"], 'fan_num':s[2]["score"], 'dif_60':culc_diff(s[2]["score"], p[2]["score"]), 'dif_24':culc_diff(s[2]["score"], pp[2]["score"])},
                     "10位":{'name':s[3]["nickname"], 'fan_num':s[3]["score"], 'dif_60':culc_diff(s[3]["score"], p[3]["score"]), 'dif_24':culc_diff(s[3]["score"], pp[3]["score"])},
@@ -43,7 +45,27 @@ def make_json(idol_id):#json整形部
                     "1000位":{'name':s[5]["nickname"], 'fan_num':s[5]["score"], 'dif_60':culc_diff(s[5]["score"], p[5]["score"]), 'dif_24':culc_diff(s[5]["score"], pp[5]["score"])},
                     "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':culc_diff(s[6]["score"], p[6]["score"]), 'dif_24':culc_diff(s[6]["score"], pp[6]["score"])}
                     }
-    except:#matsurihi.me
+        except Exception as e:
+            try:#2～23時間目
+                p = data[1]["body"]
+                return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':culc_diff(s[0]["score"], p[0]["score"]), 'dif_24':s[0]["score"]}, 
+                        "2位":{'name':s[1]["nickname"], 'fan_num':s[1]["score"], 'dif_60':culc_diff(s[1]["score"], p[1]["score"]), 'dif_24':s[1]["score"]},
+                        "3位":{'name':s[2]["nickname"], 'fan_num':s[2]["score"], 'dif_60':culc_diff(s[2]["score"], p[2]["score"]), 'dif_24':s[2]["score"]},
+                        "10位":{'name':s[3]["nickname"], 'fan_num':s[3]["score"], 'dif_60':culc_diff(s[3]["score"], p[3]["score"]), 'dif_24':s[3]["score"]},
+                        "100位":{'name':s[4]["nickname"], 'fan_num':s[4]["score"], 'dif_60':culc_diff(s[4]["score"], p[4]["score"]), 'dif_24':s[4]["score"]},
+                        "1000位":{'name':s[5]["nickname"], 'fan_num':s[5]["score"], 'dif_60':culc_diff(s[5]["score"], p[5]["score"]), 'dif_24':s[5]["score"]},
+                        "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':culc_diff(s[6]["score"], p[6]["score"]), 'dif_24':s[6]["score"]}
+                        }
+            except:
+                    return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':s[0]["score"], 'dif_24':s[0]["score"]}, 
+                            "2位":{'name':s[1]["nickname"], 'fan_num':s[1]["score"], 'dif_60':s[1]["score"], 'dif_24':s[1]["score"]},
+                            "3位":{'name':s[2]["nickname"], 'fan_num':s[2]["score"], 'dif_60':s[2]["score"], 'dif_24':s[2]["score"]},
+                            "10位":{'name':s[3]["nickname"], 'fan_num':s[3]["score"], 'dif_60':s[3]["score"], 'dif_24':s[3]["score"]},
+                            "100位":{'name':s[4]["nickname"], 'fan_num':s[4]["score"], 'dif_60':s[4]["score"], 'dif_24':s[4]["score"]},
+                            "1000位":{'name':s[5]["nickname"], 'fan_num':s[5]["score"], 'dif_60':s[5]["score"], 'dif_24':s[5]["score"]},
+                            "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':s[6]["score"], 'dif_24':s[6]["score"]}
+                            }
+    except Exception as e:#matsurihi.me
         try:
             return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-25]["score"])}, 
                         "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-3]["score"]), 'dif_24':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-25]["score"])},
@@ -72,23 +94,21 @@ def make_json(idol_id):#json整形部
                             "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':data[5]["data"][-1]["score"], 'dif_24':data[5]["data"][-1]["score"]},
                             "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':data[6]["data"][-1]["score"], 'dif_24':data[6]["data"][-1]["score"]}
                             }
+                
 
 def make_image(now_time, font_color="black"):#画像生成部
     base_image_path = "haikei.jpg"
     base_img = Image.open(base_image_path).copy().convert('RGBA')
     space = Image.open("night.jpg").copy().convert('RGBA')
-    try:
-        with open('border/' + str(now_time) + '.json', 'r', encoding="utf-8") as f:
-            border = json.load(f)
+    # try:
+    #     with open('border/' + str(now_time) + '.json', 'r', encoding="utf-8") as f:
+    #         border = json.load(f)
         
-        with open('border/' + str(now_time-100) + '.json', 'r', encoding="utf-8") as f:
-            border_b24 = json.load(f)
-        print("Ver.origin")
-    except:
-        print("Ver.matsurihime")    
-    
-    
-    
+    #     with open('border/' + str(now_time-100) + '.json', 'r', encoding="utf-8") as f:
+    #         border_b24 = json.load(f)
+    #     print("Ver.origin")
+    # except:
+    #     print("Ver.matsurihime")    
     # get fontsize
     text = "3rd Aniversary" 
     font_size = 64
@@ -136,122 +156,64 @@ def make_image(now_time, font_color="black"):#画像生成部
     # img.save("test.png")
     # exit(0)
     #kogane_data = get_data()
-    try:
-        mano_data = make_json("1", border, border_b24)
-        img_mano = make_rank('mano', mano_data, now_time)
-        hiori_data = make_json('2', border, border_b24)
-        img_hiori = make_rank('hiori', hiori_data, now_time)
-        meguru_data = make_json('3', border, border_b24)
-        img_meguru = make_rank('meguru', meguru_data, now_time)
-        
-        kogane_data = make_json('4', border, border_b24)
-        img_kogane = make_rank('kogane', kogane_data, now_time)
-        mamimi_data = make_json('5', border, border_b24)
-        img_mamimi = make_rank('mamimi', mamimi_data, now_time)
-        sakuya_data = make_json('6', border, border_b24)
-        img_sakuya = make_rank('sakuya', sakuya_data, now_time)
-        yuika_data = make_json('7', border, border_b24)
-        img_yuika = make_rank('yuika', yuika_data, now_time)
-        kiriko_data = make_json('8', border, border_b24)
-        img_kiriko = make_rank('kiriko', kiriko_data, now_time)
-        
-        kaho_data = make_json('9', border, border_b24)
-        img_kaho = make_rank('kaho', kaho_data, now_time)
-        chiyoko_data = make_json('10', border, border_b24)
-        img_chiyoko = make_rank('chiyoko', chiyoko_data, now_time)
-        juri_data = make_json('11', border, border_b24)
-        img_juri = make_rank('juri', juri_data, now_time)
-        rinze_data = make_json('12', border, border_b24)
-        img_rinze = make_rank('rinze', rinze_data, now_time)
-        natsuha_data = make_json('13', border, border_b24)
-        img_natsuha = make_rank('natsuha', natsuha_data, now_time)
-        
-        amana_data = make_json('14', border, border_b24)
-        img_amana = make_rank('amana', amana_data, now_time)
-        tenka_data = make_json('15', border, border_b24)
-        img_tenka = make_rank('tenka', tenka_data, now_time)
-        chiyuki_data = make_json('16', border, border_b24)
-        img_chiyuki = make_rank('chiyuki', chiyuki_data, now_time)
-        
-        asahi_data = make_json('17', border, border_b24)
-        img_asahi = make_rank('asahi', asahi_data, now_time)
-        fuyuko_data = make_json('18', border, border_b24)
-        img_fuyuko = make_rank('fuyuko', fuyuko_data, now_time)
-        mei_data = make_json('19', border, border_b24)
-        img_mei = make_rank('mei', mei_data, now_time)
-        
-        tooru_data = make_json('20', border, border_b24)
-        img_tooru = make_rank('tooru', tooru_data, now_time)
-        madoka_data = make_json('21', border, border_b24)
-        img_madoka = make_rank('madoka', madoka_data, now_time)
-        koito_data = make_json('22', border, border_b24)
-        img_koito = make_rank('koito', koito_data, now_time)
-        hinana_data = make_json('23', border, border_b24)
-        img_hinana = make_rank('hinana', hinana_data, now_time)
-        
-        nichika_data = make_json('24', border, border_b24)
-        img_nichika = make_rank('nichika', nichika_data, now_time)
-        mikoto_data = make_json('25', border, border_b24)
-        img_mikoto = make_rank('mikoto', mikoto_data, now_time)
-    
-    except:
-        mano_data = make_json(1)
-        img_mano = make_rank('mano', mano_data)
-        hiori_data = make_json(2)
-        img_hiori = make_rank('hiori', hiori_data)
-        meguru_data = make_json(3)
-        img_meguru = make_rank('meguru', meguru_data)
-        
-        kogane_data = make_json(4)
-        img_kogane = make_rank('kogane', kogane_data)
-        mamimi_data = make_json(5)
-        img_mamimi = make_rank('mamimi', mamimi_data)
-        sakuya_data = make_json(6)
-        img_sakuya = make_rank('sakuya', sakuya_data)
-        yuika_data = make_json(7)
-        img_yuika = make_rank('yuika', yuika_data)
-        kiriko_data = make_json(8)
-        img_kiriko = make_rank('kiriko', kiriko_data)
-        
-        kaho_data = make_json(9)
-        img_kaho = make_rank('kaho', kaho_data)
-        chiyoko_data = make_json(10)
-        img_chiyoko = make_rank('chiyoko', chiyoko_data)
-        juri_data = make_json(11)
-        img_juri = make_rank('juri', juri_data)
-        rinze_data = make_json(12)
-        img_rinze = make_rank('rinze', rinze_data)
-        natsuha_data = make_json(13)
-        img_natsuha = make_rank('natsuha', natsuha_data)
-        
-        amana_data = make_json(14)
-        img_amana = make_rank('amana', amana_data)
-        tenka_data = make_json(15)
-        img_tenka = make_rank('tenka', tenka_data)
-        chiyuki_data = make_json(16)
-        img_chiyuki = make_rank('chiyuki', chiyuki_data)
-        
-        asahi_data = make_json(17)
-        img_asahi = make_rank('asahi', asahi_data)
-        fuyuko_data = make_json(18)
-        img_fuyuko = make_rank('fuyuko', fuyuko_data)
-        mei_data = make_json(19)
-        img_mei = make_rank('mei', mei_data)
-        
-        tooru_data = make_json(20)
-        img_tooru = make_rank('tooru', tooru_data)
-        madoka_data = make_json(21)
-        img_madoka = make_rank('madoka', madoka_data)
-        koito_data = make_json(22)
-        img_koito = make_rank('koito', koito_data)
-        hinana_data = make_json(23)
-        img_hinana = make_rank('hinana', hinana_data)
-        
-        nichika_data = make_json(24)
-        img_nichika = make_rank('nichika', nichika_data)
-        mikoto_data = make_json(25)
-        img_mikoto = make_rank('mikoto', mikoto_data)
-    
+    mano_data = make_json(1, now_time)
+    img_mano = make_rank('mano', mano_data)
+    # print(1)
+    hiori_data = make_json(2, now_time)
+    img_hiori = make_rank('hiori', hiori_data)
+    meguru_data = make_json(3, now_time)
+    img_meguru = make_rank('meguru', meguru_data)
+    # print(2)
+    kogane_data = make_json(4, now_time)
+    img_kogane = make_rank('kogane', kogane_data)
+    mamimi_data = make_json(5, now_time)
+    img_mamimi = make_rank('mamimi', mamimi_data)
+    sakuya_data = make_json(6, now_time)
+    img_sakuya = make_rank('sakuya', sakuya_data)
+    yuika_data = make_json(7, now_time)
+    img_yuika = make_rank('yuika', yuika_data)
+    kiriko_data = make_json(8, now_time)
+    img_kiriko = make_rank('kiriko', kiriko_data)
+    # print(3)
+    kaho_data = make_json(9, now_time)
+    img_kaho = make_rank('kaho', kaho_data)
+    chiyoko_data = make_json(10, now_time)
+    img_chiyoko = make_rank('chiyoko', chiyoko_data)
+    juri_data = make_json(11, now_time)
+    img_juri = make_rank('juri', juri_data)
+    rinze_data = make_json(12, now_time)
+    img_rinze = make_rank('rinze', rinze_data)
+    natsuha_data = make_json(13, now_time)
+    img_natsuha = make_rank('natsuha', natsuha_data)
+    # print(4)
+    amana_data = make_json(14, now_time)
+    img_amana = make_rank('amana', amana_data)
+    tenka_data = make_json(15, now_time)
+    img_tenka = make_rank('tenka', tenka_data)
+    chiyuki_data = make_json(16, now_time)
+    img_chiyuki = make_rank('chiyuki', chiyuki_data)
+    # print(5)
+    asahi_data = make_json(17, now_time)
+    img_asahi = make_rank('asahi', asahi_data)
+    fuyuko_data = make_json(18, now_time)
+    img_fuyuko = make_rank('fuyuko', fuyuko_data)
+    mei_data = make_json(19, now_time)
+    img_mei = make_rank('mei', mei_data)
+    # print(6)
+    tooru_data = make_json(20, now_time)
+    img_tooru = make_rank('tooru', tooru_data)
+    madoka_data = make_json(21, now_time)
+    img_madoka = make_rank('madoka', madoka_data)
+    koito_data = make_json(22, now_time)
+    img_koito = make_rank('koito', koito_data)
+    hinana_data = make_json(23, now_time)
+    img_hinana = make_rank('hinana', hinana_data)
+    # print(7)
+    nichika_data = make_json(24, now_time)
+    img_nichika = make_rank('nichika', nichika_data)
+    mikoto_data = make_json(25, now_time)
+    img_mikoto = make_rank('mikoto', mikoto_data)
+    # print(8)
     #イルミネ
     dst11 = Image.new('RGB', (img_mano.width*2, img_mano.height))
     dst12 = Image.new('RGB', (img_mano.width*2, img_mano.height))
@@ -844,24 +806,46 @@ def twitter_api():#API叩き部
     return api
 
 @retry(wait_fixed=10000)
-def scraping_json(idol_id):
-    # unix_time = int(now_time.timestamp()*1000)
-    # rank = "https://kl8xmr7hlb.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40005/getLatestRetrieve/{}?asOf={}".format(idol_id, unix_time)
-    # r = requests.get(rank).json()
-    # rank_id = r["body"]["id"]
-    now = requests.get("https://api.matsurihi.me/sc/v1/events/fanRanking").json()
-    now_id = now[0]["id"]
-    rank = f"https://api.matsurihi.me/sc/v1/events/fanRanking/{now_id}/rankings/logs/{idol_id}/1,2,3,10,100,1000,3000"
-    r = requests.get(rank).json()
-    # url = "https://kl8xmr7hlb.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id)
-    # r = requests.get(url)
-    # data = r.json()
-    time.sleep(1)
-    return r
+def scraping_json(idol_id, now_time):
+    try:
+        unix_time = int(now_time.timestamp()*1000)
+        u_b60 = unix_time - 60*60*1000
+        u_b24 = unix_time - 60*60*24*1000
+        rank = f"https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40006/getLatestRetrieve/{idol_id}?asOf={unix_time}"
+        r = requests.get(rank).json()
+        rank_id = r["body"]["id"]
+        url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id)
+        rr = requests.get(url).json()
+        rank_b60 = f"https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40006/getLatestRetrieve/{idol_id}?asOf={u_b60}"
+        r_b60 = requests.get(rank_b60).json()
+        try:
+            rank_id_b60 = r_b60["body"]["id"]
+            url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id_b60)
+            rr_b60 = requests.get(url).json()
+        except:
+            rr_b60 = {}
+        rank_b24 = f"https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40006/getLatestRetrieve/{idol_id}?asOf={u_b24}"
+        r_b24 = requests.get(rank_b24).json()
+        try:
+            rank_id_b24 = r_b24["body"]["id"]
+            url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id_b24)
+            rr_b24 = requests.get(url).json()
+            time.sleep(0.5)
+            return [rr, rr_b24, rr_b60]
+        except:
+            time.sleep(0.5)
+            return [rr, rr_b60]
+    except:
+        now = requests.get("https://api.matsurihi.me/sc/v1/events/fanRanking").json()
+        now_id = now[0]["id"]
+        rank = f"https://api.matsurihi.me/sc/v1/events/fanRanking/{now_id}/rankings/logs/{idol_id}/1,2,3,10,100,1000,3000"
+        r = requests.get(rank).json()
+        return r
 
-
+# now = datetime.datetime.now()
 now = datetime.datetime.now()+timedelta(hours=9)
-# make_image(now)
-if((1 <= ((now.day-12)*24+now.hour-15)<= 213) and now.minute==20):
+# print(scraping_json(1, now))
+make_image(now)
+if((1 <= ((now.day-12)*24+now.hour-15)<= 189) and now.minute==20):
     tweet_picture(now)
     
