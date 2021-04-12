@@ -828,7 +828,6 @@ def scraping_json(idol_id):
 
 
 now = datetime.datetime.now()+timedelta(hours=9)
-make_image(now)
-if((0 <= ((now.day-12)*24+now.hour-15)<= 213) and now.minute==20):
+if((0 <= ((now.day-12)*24+now.hour-15)<= 189) and now.minute==20):
     tweet_picture(now)
     
