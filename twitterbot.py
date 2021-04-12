@@ -40,14 +40,34 @@ def make_json(idol_id):#json整形部
                     "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':culc_diff(s[6]["score"], p[6]["score"]), 'dif_24':culc_diff(s[6]["score"], pp[6]["score"])}
                     }
     except:#matsurihi.me
-        return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-25]["score"])}, 
-                    "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-3]["score"]), 'dif_24':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-25]["score"])},
-                    "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-3]["score"]), 'dif_24':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-25]["score"])},
-                    "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-3]["score"]), 'dif_24':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-25]["score"])},
-                    "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-3]["score"]), 'dif_24':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-25]["score"])},
-                    "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-3]["score"]), 'dif_24':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-25]["score"])},
-                    "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-3]["score"]), 'dif_24':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-25]["score"])}
-                    }
+        try:
+            return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-25]["score"])}, 
+                        "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-3]["score"]), 'dif_24':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-25]["score"])},
+                        "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-3]["score"]), 'dif_24':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-25]["score"])},
+                        "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-3]["score"]), 'dif_24':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-25]["score"])},
+                        "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-3]["score"]), 'dif_24':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-25]["score"])},
+                        "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-3]["score"]), 'dif_24':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-25]["score"])},
+                        "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-3]["score"]), 'dif_24':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-25]["score"])}
+                        }
+        except:
+            try:#2～23時間目
+                return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':data[0]["data"][-1]["score"]}, 
+                            "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':culc_diff(data[1]["data"][-1]["score"], data[1]["data"][-3]["score"]), 'dif_24':data[1]["data"][-1]["score"]},
+                            "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':culc_diff(data[2]["data"][-1]["score"], data[2]["data"][-3]["score"]), 'dif_24':data[2]["data"][-1]["score"]},
+                            "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':culc_diff(data[3]["data"][-1]["score"], data[3]["data"][-3]["score"]), 'dif_24':data[3]["data"][-1]["score"]},
+                            "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':culc_diff(data[4]["data"][-1]["score"], data[4]["data"][-3]["score"]), 'dif_24':data[4]["data"][-1]["score"]},
+                            "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':culc_diff(data[5]["data"][-1]["score"], data[5]["data"][-3]["score"]), 'dif_24':data[5]["data"][-1]["score"]},
+                            "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':culc_diff(data[6]["data"][-1]["score"], data[6]["data"][-3]["score"]), 'dif_24':data[6]["data"][-1]["score"]}
+                            }
+            except:#1時間目のみ
+                return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':data[0]["data"][-1]["score"], 'dif_24':data[0]["data"][-1]["score"]}, 
+                            "2位":{'fan_num':data[1]["data"][-1]["score"], 'dif_60':data[1]["data"][-1]["score"], 'dif_24':data[1]["data"][-1]["score"]},
+                            "3位":{'fan_num':data[2]["data"][-1]["score"], 'dif_60':data[2]["data"][-1]["score"], 'dif_24':data[2]["data"][-1]["score"]},
+                            "10位":{'fan_num':data[3]["data"][-1]["score"], 'dif_60':data[3]["data"][-1]["score"], 'dif_24':data[3]["data"][-1]["score"]},
+                            "100位":{'fan_num':data[4]["data"][-1]["score"], 'dif_60':data[4]["data"][-1]["score"], 'dif_24':data[4]["data"][-1]["score"]},
+                            "1000位":{'fan_num':data[5]["data"][-1]["score"], 'dif_60':data[5]["data"][-1]["score"], 'dif_24':data[5]["data"][-1]["score"]},
+                            "3000位":{'fan_num':data[6]["data"][-1]["score"], 'dif_60':data[6]["data"][-1]["score"], 'dif_24':data[6]["data"][-1]["score"]}
+                            }
 
 def make_image(now_time, font_color="black"):#画像生成部
     base_image_path = "haikei.jpg"
@@ -794,6 +814,7 @@ def tweet_with_imgs(tweet, files):#ツイート実行部
 def tweet_picture(nowtime):#メイン
     make_image(nowtime)
     text = str(nowtime.month) + "/" +  str(nowtime.day) + " " + str(nowtime.hour) + ":00 現在\nPカップボーダー\n"
+    # text += "(これはテストです, This is test tweet.)"
     text += "\n#Pカップボーダー"
     print(text)
     tweet_with_imgs(text, ["border1.png", "border2.png", "border3.png", "border4.png"])
@@ -828,6 +849,7 @@ def scraping_json(idol_id):
 
 
 now = datetime.datetime.now()+timedelta(hours=9)
-if((0 <= ((now.day-12)*24+now.hour-15)<= 189) and now.minute==20):
+tweet_picture(now)
+if((0 <= ((now.day-12)*24+now.hour-15)<= 213) and now.minute==20):
     tweet_picture(now)
     
