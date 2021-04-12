@@ -103,20 +103,20 @@ def make_image(now_time, font_color="black"):#画像生成部
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
     text = "現在時刻:"
-    font_size = 60
-    height = 400
-    width = 180
+    font_size = 40
+    height = 405
+    width = 185
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
     text = str(datetime.datetime.now())[:-7]
     font_size = 40
-    height = 410
-    width = 442
+    height = 412
+    width = 403
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
     text = "by:@Pcup_borderbot"
-    font_size = 10
-    height = base_img.height - 10
+    font_size = 13
+    height = base_img.height - 15
     width = 0
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
 
@@ -127,7 +127,14 @@ def make_image(now_time, font_color="black"):#画像生成部
     width = 230
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
-
+    past_time = (datetime.datetime.now().day-12)*24+datetime.datetime.now().hour-15
+    text = "※データ習得時間により差が出るため60分速は参考値です。"
+    font_size = 15
+    height = base_img.height - 15
+    width = 730
+    img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
+    # img.save("test.png")
+    # exit(0)
     #kogane_data = get_data()
     try:
         mano_data = make_json("1", border, border_b24)
@@ -854,6 +861,7 @@ def scraping_json(idol_id):
 
 
 now = datetime.datetime.now()+timedelta(hours=9)
+# make_image(now)
 if((1 <= ((now.day-12)*24+now.hour-15)<= 213) and now.minute==20):
     tweet_picture(now)
     
