@@ -1,3 +1,8 @@
+################################################################
+#               Pcup borderbot                                 #
+#               by using matsurihi.me                          #
+#               made by k0gnae @23k_h                          #
+################################################################
 from PIL import Image, ImageDraw, ImageFont
 import os
 import sys
@@ -8,7 +13,6 @@ import time
 import requests
 from retrying import retry
 from datetime import timedelta
-
 
 def add_text_to_image(img, text, font_size, font_color, height, width, max_length=50):#画像に文字を合成する部分
     font_path = "rn3lo-1vsc6.ttf"
