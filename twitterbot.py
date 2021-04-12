@@ -323,6 +323,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     img_alsto = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
     bg_clear.paste(alsto, (img.width-184, img.height-163))
+    img_alsto = Image.alpha_composite(img_alsto, bg_clear)
     dst41.paste(img_alsto, (0, 0))
     dst41.paste(img_amana, (img_mano.width, 0))
     dst42.paste(img_tenka, (0, 0))
