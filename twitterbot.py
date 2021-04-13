@@ -149,6 +149,13 @@ def make_image(now_time, font_color="black"):#画像生成部
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
     past_time = (datetime.datetime.now().day-12)*24+datetime.datetime.now().hour-15
+    text = "※13～19日は6時間/日のお休み時間があります。"
+    font_size = 15
+    height = base_img.height - 30
+    width = 796
+    img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
+    
+    past_time = (datetime.datetime.now().day-12)*24+datetime.datetime.now().hour-15
     text = "※データ習得時間により差が出るため60分速は参考値です。"
     font_size = 15
     height = base_img.height - 15
