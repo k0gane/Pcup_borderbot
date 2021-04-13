@@ -36,6 +36,7 @@ def make_json(idol_id, now_time):#json整形部
         # print(data)
         s = data[0]["body"]
         try:
+            p = data[1]["body"]
             pp = data[2]["body"]
             return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':culc_diff(s[0]["score"], p[0]["score"]), 'dif_24':culc_diff(s[0]["score"], pp[0]["score"])}, 
                     "2位":{'name':s[1]["nickname"], 'fan_num':s[1]["score"], 'dif_60':culc_diff(s[1]["score"], p[1]["score"]), 'dif_24':culc_diff(s[1]["score"], pp[1]["score"])},
@@ -257,7 +258,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     illumine = Image.open('logo/illumine.png').convert('RGBA')
     img_illu = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    bg_clear.paste(illumine, (img.width-236, img.height-130))
+    bg_clear.paste(illumine, (img.width-236, 0))
     img_illu = Image.alpha_composite(img_illu, bg_clear)
 
     dst11.paste(img_illu, (0, 0))
@@ -269,7 +270,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     lantica = Image.open('logo/lantica.png').convert('RGBA')
     img_lantica = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    bg_clear.paste(lantica, (img.width-304, img.height-118))
+    bg_clear.paste(lantica, (img.width-304, 0))
     img_lantica = Image.alpha_composite(img_lantica, bg_clear)
     dst21.paste(img_lantica, (0, 0))
     dst21.paste(img_kogane, (img_mano.width, 0))
@@ -283,7 +284,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     houkura = Image.open('logo/houkura.png').convert('RGBA')
     img_houkura = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    bg_clear.paste(houkura, (img.width-242, img.height-169))
+    bg_clear.paste(houkura, (img.width-242, 0))
     img_houkura = Image.alpha_composite(img_houkura, bg_clear)
     dst31.paste(img_houkura, (0, 0))
     dst31.paste(img_kaho, (img_mano.width, 0))
@@ -295,7 +296,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     alsto = Image.open('logo/alsto.png').convert('RGBA')
     img_alsto = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    bg_clear.paste(alsto, (img.width-184, img.height-163))
+    bg_clear.paste(alsto, (img.width-184, 0))
     img_alsto = Image.alpha_composite(img_alsto, bg_clear)
     dst41.paste(img_alsto, (0, 0))
     dst41.paste(img_amana, (img_mano.width, 0))
@@ -305,7 +306,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     stray = Image.open('logo/stray.png').convert('RGBA')
     img_stray = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    bg_clear.paste(stray, (img.width-381, img.height-82))
+    bg_clear.paste(stray, (img.width-381, 0))
     img_stray = Image.alpha_composite(img_stray, bg_clear)
     dst51.paste(img_stray, (0, 0))
     dst51.paste(img_asahi, (img_mano.width, 0))
@@ -315,7 +316,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     noctchill = Image.open('logo/noctchill.png').convert('RGBA')
     img_noctchill = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    bg_clear.paste(noctchill, (img.width-390, img.height-81))
+    bg_clear.paste(noctchill, (img.width-390, 0))
     img_noctchill = Image.alpha_composite(img_noctchill, bg_clear)
     dst61.paste(img_noctchill, (0, 0))
     dst61.paste(img_tooru, (img_mano.width, 0))
@@ -327,7 +328,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     shiis = Image.open('logo/shiis.png').convert('RGBA')
     img_shiis = img.copy()
     bg_clear = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    bg_clear.paste(shiis, (img.width-198, img.height-63))  
+    bg_clear.paste(shiis, (img.width-198, 0))  
     img_shiis = Image.alpha_composite(img_shiis, bg_clear)
     dst71.paste(img_shiis, (0, 0))
     dst71.paste(img_nichika, (img_mano.width, 0))
@@ -831,7 +832,7 @@ def scraping_json(idol_id, now_time):
             url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id_b24)
             rr_b24 = requests.get(url).json()
             time.sleep(0.5)
-            return [rr, rr_b24, rr_b60]
+            return [rr, rr_b60, rr_b24]
         except:
             time.sleep(0.5)
             return [rr, rr_b60]
@@ -842,7 +843,7 @@ def scraping_json(idol_id, now_time):
         r = requests.get(rank).json()
         return r
 
-# now = datetime.datetime.now()
+now = datetime.datetime.now()
 
 # print(scraping_json(1, now))
 # make_image(now)
