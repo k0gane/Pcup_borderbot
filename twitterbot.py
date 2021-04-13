@@ -831,7 +831,7 @@ def scraping_json(idol_id, now_time):
             url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id_b24)
             rr_b24 = requests.get(url).json()
             time.sleep(0.5)
-            return [rr, rr_b24, rr_b60]
+            return [rr, rr_b60, rr_b24]
         except:
             time.sleep(0.5)
             return [rr, rr_b60]
