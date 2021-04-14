@@ -795,7 +795,7 @@ def tweet_with_imgs(tweet, files):#ツイート実行部
 
 def tweet_picture(nowtime):#メイン
     make_image(nowtime)
-    text = str(nowtime.month) + "/" +  str(nowtime.day) + " " + str(nowtime.hour) + ":00 現在\nPカップボーダー\n"
+    text = str(nowtime.month) + "/" +  str(nowtime.day) + " " + str(nowtime.hour) + ":00 現在\nPカップ ボーダー\n"
     # text += "(これはテストです, This is test tweet.)"
     text += "\n#Pカップボーダー"
     print(text)
