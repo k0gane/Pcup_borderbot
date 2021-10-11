@@ -5,6 +5,8 @@ import datetime
 import json
 import tweepy
 
+pcup_whole_time = 141
+
 def add_text_to_image(img, text, font_path, font_size, font_color, height, width, max_length=50):#画像に文字を合成する部分
     position = (width, height)
     font = ImageFont.truetype(font_path, font_size)
@@ -93,7 +95,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     img = add_text_to_image(base_img, text, font_path, font_size, font_color, height, width) # dummy for get text_size
 
     past_time = (datetime.datetime.now().day-12)*24+datetime.datetime.now().hour-15
-    text = "開始から"+str(past_time)+"時間経過(残り"+str(213-past_time)+"時間)"
+    text = "開始から"+str(past_time)+"時間経過(残り"+str(pcup_whole_time-past_time)+"時間)"
     font_size = 40
     height = 500
     width = 230
