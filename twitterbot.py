@@ -17,7 +17,7 @@ from datetime import timedelta
 #prepartion
 pcup_start_day, pcup_start_hour = 12, 16
 pcup_end_day, pcup_end_hour = 18, 12
-pcup_whole_time = (pcup_end_day - pcup_start_day) * 12 + (pcup_end_hour - pcup_start_hour)
+pcup_whole_time = (pcup_end_day - pcup_start_day) * 24 + (pcup_end_hour - pcup_start_hour)
 api_domain = "1zkgz3dum2"
 event_id = 40007
 
@@ -871,8 +871,8 @@ def scraping_json(idol_id, now_time):
 # print(scraping_json(1, now))
 # make_image(now)
 
-now = datetime.datetime.now()   
-tweet_picture(now)
+# now = datetime.datetime.now()   
+# tweet_picture(now)
 while True:
     now = datetime.datetime.now()
     if((1 <= ((now.day-pcup_start_day)*24+now.hour-pcup_start_hour)<= pcup_whole_time) and now.minute==20):
