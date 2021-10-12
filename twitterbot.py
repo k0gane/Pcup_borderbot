@@ -165,7 +165,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     width = 230
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
     
-    text = "※13～19日は6時間/日のお休み時間があります。"
+    text = f"※{pcup_start_day+1}～{pcup_end_day-1}日は6時間/日のお休み時間があります。"
     font_size = 15
     height = base_img.height - 30
     width = 796
