@@ -870,10 +870,12 @@ def scraping_json(idol_id, now_time):
 # now = datetime.datetime.now()
 # print(scraping_json(1, now))
 # make_image(now)
+
+now = datetime.datetime.now()   
+tweet_picture(now)
 while True:
     now = datetime.datetime.now()
     if((1 <= ((now.day-pcup_start_day)*24+now.hour-pcup_start_hour)<= pcup_whole_time) and now.minute==20):
         tweet_picture(now)
     time.sleep(60)
-    
-# tweet_picture(datetime.datetime.now())
+
