@@ -15,6 +15,7 @@ from retrying import retry
 from datetime import timedelta
 
 #prepartion
+aniv = "3.5"
 pcup_start_day, pcup_start_hour = 12, 16
 pcup_end_day, pcup_end_hour = 18, 12
 pcup_whole_time = (pcup_end_day - pcup_start_day) * 24 + (pcup_end_hour - pcup_start_hour)
@@ -128,7 +129,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     # except:
     #     print("Ver.matsurihime")    
     # get fontsize
-    text = "3rd Aniversary" 
+    text = f"{aniv} Aniversary" 
     font_size = 64
     height = 140
     width = 300
