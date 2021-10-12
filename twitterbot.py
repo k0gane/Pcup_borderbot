@@ -1,8 +1,8 @@
-################################################################
-#               Pcup borderbot                                 #
-#               by using matsurihi.me                          #
-#               made by @23k_h                                 #
-################################################################
+########################################################
+#               Pcup borderbot                         #
+#               by using matsurihi.me                  #
+#               made by @23k_h                         #
+########################################################
 from PIL import Image, ImageDraw, ImageFont
 import os
 import sys
@@ -13,6 +13,13 @@ import time
 import requests
 from retrying import retry
 from datetime import timedelta
+
+#prepartion
+pcup_start_day, pcup_start_hour = 12, 15
+pcup_end_day, pcup_end_hour = 18, 12
+pcup_whole_time = (pcup_end_day - pcup_start_day) * 12 + (pcup_end_hour - pcup_start_hour)
+api_domain = "1zkgz3dum2"
+event_id = 40007
 
 def add_text_to_image(img, text, font_size, font_color, height, width, max_length=50):#画像に文字を合成する部分
     font_path = "rn3lo-1vsc6.ttf"
@@ -28,7 +35,7 @@ def culc_diff(a, b):#差分計算
         return a-b
     except:
         return 0
-#def make_json(idol_id, now_time):
+
 def make_json(idol_id, now_time):#json整形部
     data = scraping_json(idol_id, now_time)
     print(data)
@@ -142,7 +149,7 @@ def make_image(now_time, font_color="black"):#画像生成部
     img = add_text_to_image(base_img, text, font_size, font_color, height, width) # dummy for get text_size
 
     past_time = (datetime.datetime.now().day-12)*24+datetime.datetime.now().hour-15
-    text = "開始から"+str(past_time)+"時間経過(残り"+str(189-past_time)+"時間)"
+    text = "開始から"+str(past_time)+"時間経過(残り"+str(pcup_whole_time - past_time)+"時間)"
     font_size = 40
     height = 500
     width = 230
@@ -794,9 +801,9 @@ def tweet_with_imgs(tweet, files):#ツイート実行部
     api.update_status(status=tweet, media_ids=media_ids)
 
 def tweet_picture(nowtime):#メイン
-    make_image(nowtime)
+    # make_image(nowtime)
     text = str(nowtime.month) + "/" +  str(nowtime.day) + " " + str(nowtime.hour) + ":00 現在\nPカップ ボーダー\n"
-    # text += "(これはテストです, This is test tweet.)"
+    text += "(これはテストです。画像は前回のものです。 This is test tweet. Pictures are all past result.)"
     text += "\n#Pカップボーダー"
     print(text)
     tweet_with_imgs(text, ["border1.png", "border2.png", "border3.png", "border4.png"])
@@ -819,24 +826,24 @@ def scraping_json(idol_id, now_time):
         unix_time = int(now_time.timestamp()*1000)
         u_b60 = unix_time - 60*60*1000
         u_b24 = unix_time - 60*60*24*1000
-        rank = f"https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40006/getLatestRetrieve/{idol_id}?asOf={unix_time}"
+        rank = f"https://{api_domain}.execute-api.ap-northeast-1.amazonaws.com/dev/v1/{event_id}/getLatestRetrieve/{idol_id}?asOf={unix_time}"
         r = requests.get(rank).json()
         rank_id = r["body"]["id"]
-        url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id)
+        url = f"https://{api_domain}.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{rank_id}/1-3,10,100,1000,3000"
         rr = requests.get(url).json()
-        rank_b60 = f"https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40006/getLatestRetrieve/{idol_id}?asOf={u_b60}"
+        rank_b60 = f"https://{api_domain}.execute-api.ap-northeast-1.amazonaws.com/dev/v1/{event_id}/getLatestRetrieve/{idol_id}?asOf={u_b60}"
         r_b60 = requests.get(rank_b60).json()
         try:
             rank_id_b60 = r_b60["body"]["id"]
-            url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id_b60)
+            url = f"https://{api_domain}.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{rank_id_b60}/1-3,10,100,1000,3000"
             rr_b60 = requests.get(url).json()
         except:
             rr_b60 = {}
-        rank_b24 = f"https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/40006/getLatestRetrieve/{idol_id}?asOf={u_b24}"
+        rank_b24 = f"https://{api_domain}.execute-api.ap-northeast-1.amazonaws.com/dev/v1/{event_id}/getLatestRetrieve/{idol_id}?asOf={u_b24}"
         r_b24 = requests.get(rank_b24).json()
         try:
             rank_id_b24 = r_b24["body"]["id"]
-            url = "https://7ngdew0jfi.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{}/1-3,10,100,1000,3000".format(rank_id_b24)
+            url = f"https://{api_domain}.execute-api.ap-northeast-1.amazonaws.com/dev/v1/getStandings/{rank_id_b24}/1-3,10,100,1000,3000"
             rr_b24 = requests.get(url).json()
             time.sleep(0.5)
             return [rr, rr_b60, rr_b24]
@@ -850,13 +857,13 @@ def scraping_json(idol_id, now_time):
         r = requests.get(rank).json()
         return r
 
-now = datetime.datetime.now()
-
+# now = datetime.datetime.now()
 # print(scraping_json(1, now))
 # make_image(now)
 while True:
     now = datetime.datetime.now()
-    if((1 <= ((now.day-12)*24+now.hour-15)<= 189) and now.minute==20):
+    if((1 <= ((now.day-pcup_start_day)*24+now.hour-pcup_start_hour)<= pcup_whole_time) and now.minute==20):
         tweet_picture(now)
     time.sleep(60)
     
+# tweet_picture(datetime.datetime.now())
