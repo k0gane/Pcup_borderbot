@@ -15,7 +15,7 @@ from retrying import retry
 from datetime import timedelta
 
 #prepartion
-pcup_start_day, pcup_start_hour = 12, 15
+pcup_start_day, pcup_start_hour = 12, 16
 pcup_end_day, pcup_end_hour = 18, 12
 pcup_whole_time = (pcup_end_day - pcup_start_day) * 12 + (pcup_end_hour - pcup_start_hour)
 api_domain = "1zkgz3dum2"
