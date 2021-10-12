@@ -65,6 +65,7 @@ def make_json(idol_id, now_time):#json整形部
                         "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':culc_diff(s[6]["score"], p[6]["score"]), 'dif_24':s[6]["score"]}
                         }
             except:
+                try:
                     return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':s[0]["score"], 'dif_24':s[0]["score"]}, 
                             "2位":{'name':s[1]["nickname"], 'fan_num':s[1]["score"], 'dif_60':s[1]["score"], 'dif_24':s[1]["score"]},
                             "3位":{'name':s[2]["nickname"], 'fan_num':s[2]["score"], 'dif_60':s[2]["score"], 'dif_24':s[2]["score"]},
@@ -73,6 +74,15 @@ def make_json(idol_id, now_time):#json整形部
                             "1000位":{'name':s[5]["nickname"], 'fan_num':s[5]["score"], 'dif_60':s[5]["score"], 'dif_24':s[5]["score"]},
                             "3000位":{'name':s[6]["nickname"], 'fan_num':s[6]["score"], 'dif_60':s[6]["score"], 'dif_24':s[6]["score"]}
                             }
+                except:#3000位おらん
+                    return {"1位":{'name':s[0]["nickname"], 'fan_num':s[0]["score"], 'dif_60':s[0]["score"], 'dif_24':s[0]["score"]}, 
+                            "2位":{'name':s[1]["nickname"], 'fan_num':s[1]["score"], 'dif_60':s[1]["score"], 'dif_24':s[1]["score"]},
+                            "3位":{'name':s[2]["nickname"], 'fan_num':s[2]["score"], 'dif_60':s[2]["score"], 'dif_24':s[2]["score"]},
+                            "10位":{'name':s[3]["nickname"], 'fan_num':s[3]["score"], 'dif_60':s[3]["score"], 'dif_24':s[3]["score"]},
+                            "100位":{'name':s[4]["nickname"], 'fan_num':s[4]["score"], 'dif_60':s[4]["score"], 'dif_24':s[4]["score"]},
+                            "1000位":{'name':s[5]["nickname"], 'fan_num':s[5]["score"], 'dif_60':s[5]["score"], 'dif_24':s[5]["score"]},
+                            "3000位":{'name':"-", 'fan_num':"0", 'dif_60':"0", 'dif_24':"0"}
+                            }                    
     except Exception as e:#matsurihi.me
         try:
             return {"1位":{'fan_num':data[0]["data"][-1]["score"], 'dif_60':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-3]["score"]), 'dif_24':culc_diff(data[0]["data"][-1]["score"], data[0]["data"][-25]["score"])}, 
