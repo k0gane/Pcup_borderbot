@@ -16,6 +16,7 @@ from datetime import timedelta
 
 #prepartion
 aniv = "3.5"
+pcup_term_year = 2021
 pcup_start_day, pcup_start_hour = 12, 16
 pcup_end_day, pcup_end_hour = 18, 12
 pcup_whole_time = (pcup_end_day - pcup_start_day) * 24 + (pcup_end_hour - pcup_start_hour)
@@ -874,7 +875,7 @@ def scraping_json(idol_id, now_time):
 # tweet_picture(now)
 while True:
     now = datetime.datetime.now()
-    if((1 <= ((now.day-pcup_start_day)*24+now.hour-pcup_start_hour)<= pcup_whole_time) and now.minute==20):
+    if(now.year == pcup_term_year and (1 <= ((now.day-pcup_start_day)*24+now.hour-pcup_start_hour)<= pcup_whole_time-1) and now.minute==20):
         tweet_picture(now)
     time.sleep(60)
 
